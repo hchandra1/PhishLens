@@ -1,0 +1,34 @@
+# Render Blueprint: Dashboard -> New -> Blueprint -> pick this repository.
+# Render asks for the values marked `sync: false` when the Blueprint is created.
+services:
+  - name: phishlens
+    type: web
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    healthCheckPath: /api/health
+    autoDeploy: true
+    envVars:
+      # Render's proxy appends the caller's address to X-Forwarded-For.
+      - key: PHISHLENS_PROXY_HOPS
+        value: "1"
+      - key: PHISHLENS_RATE_LIMIT
+        value: 30/minute
+      # Required for a public URL: without it, anyone can use the service.
+      - key: PHISHLENS_ACCESS_CODE
+        sync: false
+      # e.g. https://phishlens.onrender.com (used in the Outlook add-in manifest)
+      - key: PHISHLENS_PUBLIC_URL
+        sync: false
+      # Optional checks. Leave empty to keep everything offline.
+      - key: PHISHLENS_LLM
+        value: "off"
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      - key: PHISHLENS_RDAP
+        value: "off"
+      - key: GOOGLE_SAFE_BROWSING_API_KEY
+        sync: false
+      - key: VIRUSTOTAL_API_KEY
+        sync: false

@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: "3.12"
+      - run: uv sync --frozen
+      - run: uv run ruff check .
+      - run: uv run ruff format --check .
+      - run: uv run pytest -q
+
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - run: npm ci
+      - run: npx tsc --noEmit
+      - run: npm run lint
+      - run: npm run build
+        env:
+          NEXT_OUTPUT: export
+
+  docker:
+    runs-on: ubuntu-latest
+    needs: [backend, frontend]
+    steps:
+      - uses: actions/checkout@v4
+      - run: docker build -t phishlens .
+      - name: Smoke test the container
+        run: |
+          docker run -d --name phishlens -p 8000:8000 phishlens
+          for i in $(seq 1 30); do curl -sf localhost:8000/api/health && break; sleep 1; done
+          curl -sf localhost:8000/ | grep -q "Is this email safe?"
+          curl -sf localhost:8000/outlook/manifest.xml | grep -q "OfficeApp"
+          label=$(curl -sf -X POST localhost:8000/api/analyze -H 'Content-Type: message/rfc822' \
+            --data-binary @backend/tests/fixtures/02_multipart_alternative.eml | python3 -c 'import json,sys; print(json.load(sys.stdin)["label"])')
+          test "$label" = "phishing"
+      - if: failure()
+        run: docker logs phishlens

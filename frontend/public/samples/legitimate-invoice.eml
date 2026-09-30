@@ -1,0 +1,23 @@
+Return-Path: <bounces@billing.vendor-example.com>
+Received: from mail.vendor-example.com (mail.vendor-example.com [203.0.113.10])
+ by mx.acme-defense.com with ESMTPS id abc123; Tue, 29 Sep 2026 09:14:02 -0400
+Authentication-Results: mx.acme-defense.com;
+ spf=pass smtp.mailfrom=billing.vendor-example.com;
+ dkim=pass header.d=vendor-example.com;
+ dmarc=pass header.from=vendor-example.com
+From: Vendor Billing <billing@vendor-example.com>
+To: Pat Lee <pat@acme-defense.com>
+Subject: Your September invoice
+Date: Tue, 29 Sep 2026 09:14:00 -0400
+Message-ID: <inv-2026-09@vendor-example.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+
+Hi Pat,
+
+Your invoice is ready at https://portal.vendor-example.com/invoices/2026-09.
+Questions? See our help page (https://vendor-example.com/help) or visit
+www.vendor-example.com.
+
+Thanks,
+Vendor Billing

@@ -1,0 +1,15 @@
+# docker compose up --build   then open http://localhost:8000
+# Optional settings (access code, API keys) go in a .env file next to this one.
+services:
+  phishlens:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - PHISHLENS_ACCESS_CODE
+      - PHISHLENS_RATE_LIMIT
+      - PHISHLENS_LLM
+      - PHISHLENS_RDAP
+      - ANTHROPIC_API_KEY
+      - GOOGLE_SAFE_BROWSING_API_KEY
+      - VIRUSTOTAL_API_KEY

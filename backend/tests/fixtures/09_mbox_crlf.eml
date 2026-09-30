@@ -1,0 +1,9 @@
+From MAILER-DAEMON Wed Sep 30 14:00:00 2026
+From: IT Helpdesk <it-helpdesk@acme-defense.co>
+From: Pat Lee <pat@acme-defense.com>
+To: pat@acme-defense.com
+Subject: Password expires today
+Date: Wed, 30 Sep 2026 14:00:00 +0000
+Content-Type: text/plain; charset="utf-8"
+
+Reset here: https://acme-defense.co/reset (expires in 2 hours).

@@ -1,0 +1,23 @@
+From: Pat Lee <pat@acme-defense.com>
+To: security@acme-defense.com
+Subject: Fwd: suspicious email
+Date: Wed, 30 Sep 2026 13:00:00 +0000
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="FWD"
+
+--FWD
+Content-Type: text/plain; charset="utf-8"
+
+Is this real? See attached.
+
+--FWD
+Content-Type: message/rfc822
+Content-Disposition: attachment
+
+From: "PayPal" <service@paypa1-secure.com>
+To: pat@acme-defense.com
+Subject: Account limited
+Content-Type: text/plain
+
+Verify now: https://paypa1-secure.com/verify
+--FWD--

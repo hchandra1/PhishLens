@@ -1,0 +1,35 @@
+# How signals become a label. Signal weights themselves live in signals.toml.
+
+# score >= suspicious -> "suspicious"; score >= phishing -> "phishing". Score is 0-100.
+[thresholds]
+suspicious = 20
+phishing = 50
+
+# Trust signals (negative weights, e.g. DMARC pass) only prove the sender owns
+# their domain, and attackers can pass DMARC on their own look-alike domain. So
+# they are ignored whenever any high-severity signal is present.
+[trust]
+ignore_when_high_severity = true
+
+# Maximum total an analyzer can contribute. The LLM reads attacker-written text and
+# could be manipulated or simply wrong, so it can tip a borderline email over a
+# threshold but can never make an email "phishing" on its own (25 < 50).
+[analyzer_caps]
+llm = 25
+
+# Hard overrides: any of these signals forces the label regardless of the total.
+# Keep this list to evidence that has no innocent explanation.
+[[overrides]]
+label = "phishing"
+signals = ["ATTACHMENT_RTLO_FILENAME", "ATTACHMENT_DOUBLE_EXTENSION"]
+reason = "An attachment disguises its real file type, which legitimate senders never do."
+
+[[overrides]]
+label = "phishing"
+signals = ["URL_THREAT_FEED"]
+reason = "A link in this email is on Google Safe Browsing's list of dangerous sites."
+
+[[overrides]]
+label = "phishing"
+signals = ["ATTACHMENT_KNOWN_MALWARE"]
+reason = "An attachment is identified as malware by multiple antivirus engines."

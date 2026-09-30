@@ -1,0 +1,27 @@
+Return-Path: <x@mailer.login-verify.xyz>
+Authentication-Results: mx.acme-defense.com; spf=softfail smtp.mailfrom=login-verify.xyz; dkim=none; dmarc=fail header.from=microsoft.com
+From: "Microsoft 365" <no-reply@microsoft.com>
+To: pat@acme-defense.com
+Subject: Action required: mailbox storage
+Date: Wed, 30 Sep 2026 07:01:00 +0000
+MIME-Version: 1.0
+Content-Type: multipart/alternative; boundary="ALT"
+
+--ALT
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Your mailbox is almost full.=E2=80=99 Visit https://microsoft-365.login-ver=
+ify.xyz/owa?u=3Dpat to keep your messages. xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx=
+xxxxxxxxxxxxxxxxxxxxxxxxxxxx
+--ALT
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: base64
+
+PGh0bWw+PGJvZHk+PHA+WW91ciBtYWlsYm94IGlzIGFsbW9zdCBmdWxsLjwvcD4KPHA+PGEgaHJl
+Zj0iaHR0cHM6Ly9taWNyb3NvZnQtMzY1LmxvZ2luLXZlcmlmeS54eXovb3dhP3U9cGF0Ij5odHRw
+czovL291dGxvb2sub2ZmaWNlLmNvbS9tYWlsPC9hPjwvcD4KPHA+PGEgaHJlZj0iICBodHRwczov
+L2JpdC5seS8zeFl6CiAgIj5LZWVwIG15IG1lc3NhZ2VzPC9hPjwvcD4KPGEgaHJlZj0iI3RvcCI+
+dG9wPC9hPiA8YSBocmVmPSJtYWlsdG86aGVscEBhY21lLWRlZmVuc2UuY29tIj5JVDwvYT4KPC9i
+b2R5PjwvaHRtbD4=
+--ALT--
